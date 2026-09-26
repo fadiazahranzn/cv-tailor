@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<title>{{ basics.name }} - {% block title %}CV{% endblock %}</title>
+<style>
+  /* static font files bundled with the skill (no network needed, embeds as TrueType for ATS) */
+  {% for fam, file in [('Source Serif 4', 'SourceSerif4'), ('Inter', 'Inter')] %}
+  {% for w, style in [(400, 'Regular'), (600, 'SemiBold'), (700, 'Bold')] %}
+  @font-face { font-family: '{{ fam }}'; src: url('{{ font_dir|safe }}/{{ file }}-{{ style }}.ttf'); font-weight: {{ w }}; }
+  {% endfor %}{% endfor %}
+  /* Bronzor-style layout (Reactive Resume): centered header, section title in the
+     left column, content on the right, thin accent rule above each section. */
+  :root {
+    --accent: {{ accent }};
+    --paper: {{ paper }};
+    --ink: #1f1f1d;
+    --muted: #5b5b57;
+    --font: {{ font_stack|safe }};
+  }
+  @page { size: {{ page_size }}; margin: 13mm 0 13mm 0; background: var(--paper); }
+  @page :first { margin-top: 0; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 9.6pt;
+    line-height: 1.38;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .page { padding: 13mm 16mm 0 16mm; }
+  a { color: inherit; text-decoration: none; }
+
+  header { text-align: center; margin-bottom: 5mm; }
+  header h1 { font-size: 25pt; font-weight: 700; margin: 0; letter-spacing: -0.3px; line-height: 1.1; }
+  header .headline { font-size: 11.5pt; color: var(--muted); margin-top: 1.5mm; }
+  header .contact { font-size: 8.4pt; color: var(--muted); margin-top: 2mm; }
+  header .contact span + span::before { content: ""; display: inline-block; width: 4mm; }
+
+  /* float layout (not grid) so long sections split cleanly across pages */
+  section { border-top: 0.8px solid var(--accent); padding: 3mm 0 2.2mm; display: flow-root; }
+  section > h2 { float: left; width: 38mm; font-size: 11.5pt; font-weight: 700; color: var(--accent);
+                 margin: 0; line-height: 1.25; }
+  section > .body { margin-left: 43mm; }
+  section .body > p { margin: 0; }
+
+  {% block css %}{% endblock %}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>{{ basics.name }}</h1>
+    {% if basics.headline %}<div class="headline">{{ basics.headline }}</div>{% endif %}
+    <div class="contact">
+      {% if basics.location %}<span>{{ basics.location }}</span>{% endif %}
+      {% if basics.phone %}<span>{{ basics.phone }}</span>{% endif %}
+      {% if basics.email %}<span><a href="mailto:{{ basics.email }}">{{ basics.email }}</a></span>{% endif %}
+      {% for l in basics.links or [] %}<span><a href="{{ l.url }}">{{ l.label }}</a></span>{% endfor %}
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

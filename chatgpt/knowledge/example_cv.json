@@ -1,0 +1,52 @@
+{
+  "_note": "Fictional example showing the schema. Not real data.",
+  "lang": "en",
+  "theme": { "color": "green", "font": "serif", "page_size": "A4" },
+  "basics": {
+    "name": "Alex Morgan",
+    "headline": "Data Analyst",
+    "location": "Jakarta, Indonesia",
+    "phone": "+62 812 0000 0000",
+    "email": "alex.morgan@example.com",
+    "links": [{ "label": "linkedin.com/in/alexmorgan", "url": "https://www.linkedin.com/in/alexmorgan" }]
+  },
+  "summary": "Data analyst with two years of experience turning sales and operations data into dashboards and decisions. Built SQL pipelines and Power BI reports used weekly by 40+ managers, cutting manual reporting time by 60%. Comfortable with Python, statistics, and explaining findings to non-technical stakeholders.",
+  "skills": [
+    { "group": "Analysis", "items": ["SQL", "Python (pandas)", "Excel", "A/B testing"] },
+    { "group": "Visualization", "items": ["Power BI", "Looker Studio"] },
+    { "group": "Data engineering", "items": ["dbt", "BigQuery", "Airflow basics"] },
+    { "group": "Soft skills", "items": ["Stakeholder communication", "Problem-solving"] }
+  ],
+  "experience": [
+    {
+      "title": "Northstar Retail",
+      "subtitle": "Data Analyst",
+      "date": "Jan 2024 – Present",
+      "bullets": [
+        "Built Power BI sales dashboards used weekly by 40+ store managers, replacing 6 manual Excel reports.",
+        "Wrote SQL models in BigQuery to unify POS and inventory data, reducing stock discrepancies by 15%."
+      ]
+    },
+    {
+      "title": "Form & Field",
+      "subtitle": "Operations Intern",
+      "date": "Jun – Dec 2023",
+      "bullets": ["Automated weekly operations reporting with Python, saving the team ~5 hours per week."]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Customer Churn Analysis",
+      "subtitle": "Personal project",
+      "date": "2023",
+      "bullets": ["Analyzed 50K telco customers with Python and logistic regression; identified 3 churn drivers."]
+    }
+  ],
+  "education": [
+    { "title": "University of Indonesia", "subtitle": "Bachelor of Statistics", "date": "2019 – 2023" }
+  ],
+  "certifications": [
+    { "title": "Google Data Analytics Professional Certificate", "subtitle": "Coursera", "date": "2023" }
+  ],
+  "section_order": ["summary", "skills", "experience", "projects", "education", "certifications"]
+}

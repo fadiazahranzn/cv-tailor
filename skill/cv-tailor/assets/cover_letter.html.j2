@@ -1,0 +1,25 @@
+{% extends '_base.html.j2' %}
+{% block title %}Cover Letter{% endblock %}
+{% block css %}
+  .letter { border-top: 0.8px solid var(--accent); padding-top: 6mm; font-size: 10.3pt; line-height: 1.55; }
+  .letter .date { color: var(--muted); margin-bottom: 5mm; }
+  .letter .recipient { margin-bottom: 5mm; }
+  .letter .recipient div:first-child { font-weight: 700; }
+  .letter .subject { font-weight: 700; color: var(--accent); margin-bottom: 5mm; }
+  .letter p { margin: 0 0 3.5mm 0; text-align: left; hyphens: manual; }
+  .letter .closing { margin-top: 6mm; }
+  .letter .signature { font-weight: 700; margin-top: 12mm; }
+{% endblock %}
+{% block content %}
+  <div class="letter">
+    {% if letter.date %}<div class="date">{{ letter.date }}</div>{% endif %}
+    <div class="recipient">
+      {% for line in letter.recipient or [] %}<div>{{ line }}</div>{% endfor %}
+    </div>
+    {% if letter.subject %}<div class="subject">{{ letter.subject }}</div>{% endif %}
+    {% if letter.greeting %}<p>{{ letter.greeting }}</p>{% endif %}
+    {% for para in letter.paragraphs %}<p>{{ para }}</p>{% endfor %}
+    <div class="closing">{{ letter.closing or 'Sincerely,' }}</div>
+    <div class="signature">{{ basics.name }}</div>
+  </div>
+{% endblock %}

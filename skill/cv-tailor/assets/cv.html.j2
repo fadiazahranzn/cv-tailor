@@ -1,0 +1,61 @@
+{% extends '_base.html.j2' %}
+{% block css %}
+  .item { margin-bottom: 2.6mm; break-inside: avoid; }
+  .item:last-child { margin-bottom: 0.5mm; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .item-title { font-weight: 700; font-size: 10pt; }
+  .item-sub { font-weight: 600; font-size: 9.4pt; }
+  .item-meta { font-size: 8.4pt; color: var(--muted); white-space: nowrap; }
+  .item-desc { margin-top: 0.4mm; }
+  ul { margin: 0.8mm 0 0 0; padding-left: 4.2mm; }
+  li { margin: 0.3mm 0; padding-left: 0.5mm; }
+  li::marker { color: var(--accent); }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; row-gap: 2mm; }
+  .skills.single { grid-template-columns: 1fr; }
+  .skills .group { break-inside: avoid; }
+  .skills .group-name { font-weight: 700; font-size: 9.6pt; }
+  .skills .group-items { color: var(--ink); }
+{% endblock %}
+{% block content %}
+
+  {% for sid in section_order %}
+    {% set label = labels.get(sid, sid|replace('_',' ')|title) %}
+
+    {% if sid == 'summary' and summary %}
+    <section><h2>{{ label }}</h2><div class="body"><p>{{ summary }}</p></div></section>
+
+    {% elif sid == 'skills' and skills %}
+    <section><h2>{{ label }}</h2><div class="body">
+      <div class="skills {{ 'single' if skills_layout == 'single' else '' }}">
+      {% for g in skills %}
+        <div class="group">
+          {% if g.group %}<div class="group-name">{{ g.group }}</div>{% endif %}
+          <div class="group-items">{{ g['items'] | join(', ') }}</div>
+        </div>
+      {% endfor %}
+      </div>
+    </div></section>
+
+    {% elif sid in entries and entries[sid] %}
+    <section><h2>{{ label }}</h2><div class="body">
+      {% for e in entries[sid] %}
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">{{ e.title }}</div>
+          {% if e.date %}<div class="item-meta">{{ e.date }}</div>{% endif %}
+        </div>
+        {% if e.subtitle or e.location %}
+        <div class="item-head">
+          <div class="item-sub">{{ e.subtitle or '' }}</div>
+          {% if e.location %}<div class="item-meta">{{ e.location }}</div>{% endif %}
+        </div>
+        {% endif %}
+        {% if e.description %}<div class="item-desc">{{ e.description }}</div>{% endif %}
+        {% if e.bullets %}<ul>{% for b in e.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+      {% endfor %}
+    </div></section>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

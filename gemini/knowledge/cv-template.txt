@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV</title>
+<!--
+  CV / cover letter template (Reactive Resume "Bronzor" style).
+  HOW TO USE: only edit the JSON inside <script id="cv-data">. Everything else renders from it.
+  - "type": "cv" or "cover_letter"
+  - theme.color: "green" | "purple" | "orange" | any #hex ; theme.font: "serif" | "sans"
+  Save as PDF: open in Chrome/Edge -> click "Save as PDF" (or Ctrl+P) -> Destination "Save as PDF",
+  Margins "Default", tick "Background graphics", untick "Headers and footers".
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #4a7a62; --paper: #faf9f5; --ink: #1f1f1d; --muted: #5b5b57;
+          --font: 'Source Serif 4', Georgia, 'Times New Roman', serif; }
+  @page { size: A4; margin: 13mm 0 13mm 0; background: #faf9f5; }
+  @page :first { margin-top: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #e9e7e1; color: var(--ink); font-family: var(--font);
+               font-size: 9.6pt; line-height: 1.38; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { background: var(--paper); width: 210mm; min-height: 297mm; margin: 12mm auto; padding: 13mm 16mm 10mm;
+           box-shadow: 0 2px 18px rgba(0,0,0,.12); }
+  @media screen and (max-width: 820px) { .sheet { width: 100%; margin: 0; padding: 8mm 6mm; }
+                              section > h2 { float: none !important; width: auto !important; margin-bottom: 1.5mm !important; }
+                              section > .body { margin-left: 0 !important; } }
+  .toolbar { position: sticky; top: 0; z-index: 5; display: flex; gap: 8px; justify-content: center; padding: 10px;
+             background: #1f1f1d; font-family: Inter, Arial, sans-serif; }
+  .toolbar button { font: 600 14px Inter, Arial, sans-serif; padding: 8px 16px; border-radius: 8px; border: 0;
+                    background: var(--accent); color: #fff; cursor: pointer; }
+  .toolbar span { color: #cfcfcf; font-size: 12px; align-self: center; }
+  a { color: inherit; text-decoration: none; }
+  header { text-align: center; margin-bottom: 5mm; }
+  header h1 { font-size: 25pt; font-weight: 700; margin: 0; letter-spacing: -0.3px; line-height: 1.1; }
+  header .headline { font-size: 11.5pt; color: var(--muted); margin-top: 1.5mm; }
+  header .contact { font-size: 8.4pt; color: var(--muted); margin-top: 2mm; display: flex; flex-wrap: wrap;
+                    justify-content: center; column-gap: 4mm; }
+  section { border-top: 0.8px solid var(--accent); padding: 3mm 0 2.2mm; display: flow-root; }
+  section > h2 { float: left; width: 38mm; font-size: 11.5pt; font-weight: 700; color: var(--accent); margin: 0; line-height: 1.25; }
+  section > .body { margin-left: 43mm; }
+  section .body > p { margin: 0; }
+  .item { margin-bottom: 2.6mm; break-inside: avoid; }
+  .item:last-child { margin-bottom: 0.5mm; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .item-title { font-weight: 700; font-size: 10pt; }
+  .item-sub { font-weight: 600; font-size: 9.4pt; }
+  .item-meta { font-size: 8.4pt; color: var(--muted); white-space: nowrap; }
+  ul { margin: 0.8mm 0 0; padding-left: 4.2mm; }
+  li { margin: 0.3mm 0; padding-left: 0.5mm; }
+  li::marker { color: var(--accent); }
+  .skills { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; row-gap: 2mm; }
+  .skills.single { grid-template-columns: 1fr; }
+  .group-name { font-weight: 700; }
+  .letter { border-top: 0.8px solid var(--accent); padding-top: 6mm; font-size: 10.3pt; line-height: 1.55; }
+  .letter .date { color: var(--muted); margin-bottom: 5mm; }
+  .letter .recipient { margin-bottom: 5mm; }
+  .letter .recipient div:first-child { font-weight: 700; }
+  .letter .subject { font-weight: 700; color: var(--accent); margin-bottom: 5mm; }
+  .letter p { margin: 0 0 3.5mm; }
+  .letter .signature { font-weight: 700; margin-top: 12mm; }
+  /* keep last so it overrides the screen-only rules above */
+  @media print {
+    html, body { background: var(--paper); }
+    .sheet { margin: 0; box-shadow: none; width: auto; min-height: 0; padding: 13mm 16mm 0; }
+    .toolbar { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">Save as PDF</button>
+  <span>Ctrl+P → Save as PDF · centang "Background graphics" · matikan "Headers and footers"</span></div>
+<div class="sheet" id="root"></div>
+
+<script id="cv-data" type="application/json">
+{
+  "type": "cv",
+  "lang": "en",
+  "theme": { "color": "green", "font": "serif" },
+  "basics": { "name": "Alex Morgan", "headline": "Data Analyst", "location": "Jakarta, Indonesia",
+              "phone": "+62 812 0000 0000", "email": "alex.morgan@example.com",
+              "links": [{ "label": "linkedin.com/in/alexmorgan", "url": "https://www.linkedin.com/in/alexmorgan" }] },
+  "summary": "Data analyst with two years of experience turning sales data into dashboards and decisions.",
+  "skills": [{ "group": "Analysis", "items": ["SQL", "Python (pandas)", "Excel"] },
+             { "group": "Visualization", "items": ["Power BI", "Looker Studio"] }],
+  "experience": [{ "title": "Northstar Retail", "subtitle": "Data Analyst", "date": "Jan 2024 – Present",
+                   "bullets": ["Built Power BI sales dashboards used weekly by 40+ store managers."] }],
+  "education": [{ "title": "University of Indonesia", "subtitle": "Bachelor of Statistics", "date": "2019 – 2023" }],
+  "section_order": ["summary", "skills", "experience", "education"]
+}
+</script>
+
+<script>
+(function () {
+  var ACCENTS = { green: "#4a7a62", purple: "#7b5ea7", orange: "#b86a45" };
+  var FONTS = { serif: "'Source Serif 4', Georgia, 'Times New Roman', serif", sans: "Inter, Arial, sans-serif" };
+  var LABELS = {
+    en: { summary: "About me", skills: "Skills", experience: "Experience", projects: "Projects", education: "Education",
+          certifications: "Certifications", awards: "Achievements", publications: "Publication", languages: "Languages",
+          training: "Training", volunteer: "Organization" },
+    id: { summary: "Tentang saya", skills: "Keahlian", experience: "Pengalaman", projects: "Proyek", education: "Pendidikan",
+          certifications: "Sertifikasi", awards: "Prestasi", publications: "Publikasi", languages: "Bahasa",
+          training: "Pelatihan", volunteer: "Organisasi" }
+  };
+  var d = JSON.parse(document.getElementById("cv-data").textContent);
+  var theme = d.theme || {};
+  var root = document.getElementById("root");
+  document.documentElement.style.setProperty("--accent", ACCENTS[theme.color] || theme.color || ACCENTS.green);
+  document.documentElement.style.setProperty("--font", FONTS[theme.font] || FONTS.serif);
+  document.documentElement.lang = d.lang || "en";
+  if (theme.page_size === "Letter") { var s = document.createElement("style"); s.textContent = "@page{size:Letter}"; document.head.appendChild(s); }
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null && text !== "") e.textContent = text;
+    return e;
+  }
+  function add(parent, child) { if (child) parent.appendChild(child); return child; }
+
+  var b = d.basics || {};
+  document.title = (b.name || "CV") + (d.type === "cover_letter" ? " - Cover Letter" : " - CV");
+  var header = add(root, el("header"));
+  add(header, el("h1", "", b.name));
+  if (b.headline) add(header, el("div", "headline", b.headline));
+  var contact = add(header, el("div", "contact"));
+  [b.location, b.phone].forEach(function (v) { if (v) add(contact, el("span", "", v)); });
+  if (b.email) { var a = el("a", "", b.email); a.href = "mailto:" + b.email; add(add(contact, el("span")), a); }
+  (b.links || []).forEach(function (l) { var a = el("a", "", l.label); a.href = l.url; add(add(contact, el("span")), a); });
+
+  if (d.type === "cover_letter") {
+    var L = d.letter || {};
+    var box = add(root, el("div", "letter"));
+    if (L.date) add(box, el("div", "date", L.date));
+    var rec = add(box, el("div", "recipient"));
+    (L.recipient || []).forEach(function (r) { add(rec, el("div", "", r)); });
+    if (L.subject) add(box, el("div", "subject", L.subject));
+    if (L.greeting) add(box, el("p", "", L.greeting));
+    (L.paragraphs || []).forEach(function (p) { add(box, el("p", "", p)); });
+    add(box, el("div", "", L.closing || "Sincerely,"));
+    add(box, el("div", "signature", b.name));
+    return;
+  }
+
+  var labels = Object.assign({}, LABELS[d.lang] || LABELS.en, d.labels || {});
+  (d.section_order || ["summary", "skills", "experience", "projects", "education", "certifications", "awards"]).forEach(function (sid) {
+    var label = labels[sid] || sid.replace(/_/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    var section = el("section"), body = el("div", "body");
+    section.appendChild(el("h2", "", label)); section.appendChild(body);
+    if (sid === "summary") {
+      if (!d.summary) return;
+      add(body, el("p", "", d.summary));
+    } else if (sid === "skills") {
+      if (!(d.skills || []).length) return;
+      var grid = add(body, el("div", "skills" + (theme.skills_layout === "single" ? " single" : "")));
+      d.skills.forEach(function (g) {
+        var gr = add(grid, el("div"));
+        if (g.group) add(gr, el("div", "group-name", g.group));
+        add(gr, el("div", "", (g.items || []).join(", ")));
+      });
+    } else {
+      var items = d[sid];
+      if (!Array.isArray(items) || !items.length) return;
+      items.forEach(function (e) {
+        var it = add(body, el("div", "item"));
+        var h = add(it, el("div", "item-head"));
+        add(h, el("div", "item-title", e.title));
+        if (e.date) add(h, el("div", "item-meta", e.date));
+        if (e.subtitle || e.location) {
+          var h2 = add(it, el("div", "item-head"));
+          add(h2, el("div", "item-sub", e.subtitle || ""));
+          if (e.location) add(h2, el("div", "item-meta", e.location));
+        }
+        if (e.description) add(it, el("div", "", e.description));
+        if ((e.bullets || []).length) {
+          var ul = add(it, el("ul"));
+          e.bullets.forEach(function (t) { add(ul, el("li", "", t)); });
+        }
+      });
+    }
+    root.appendChild(section);
+  });
+})();
+</script>
+</body>
+</html>
