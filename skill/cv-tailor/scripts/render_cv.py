@@ -197,7 +197,7 @@ def main():
     ap.add_argument("--engine", default="auto", choices=["auto", "chrome", "weasyprint", "reportlab"])
     a = ap.parse_args()
 
-    cv = json.loads(Path(a.cv_json).read_text(encoding="utf-8"))
+    cv = json.loads(Path(a.cv_json).read_text(encoding="utf-8-sig"))
     out = Path(os.path.abspath(a.out_pdf))  # resolve() keeps relative paths on Windows py<3.10
     out.parent.mkdir(parents=True, exist_ok=True)
     engine = pick_engine(a.engine)

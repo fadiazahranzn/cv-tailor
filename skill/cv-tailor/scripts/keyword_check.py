@@ -27,7 +27,7 @@ def cv_text(path):
         except ImportError:
             from pypdf import PdfReader
             return "\n".join(page.extract_text() or "" for page in PdfReader(str(p)).pages)
-    data = json.loads(p.read_text(encoding="utf-8"))
+    data = json.loads(p.read_text(encoding="utf-8-sig"))
     keep = {k: v for k, v in data.items() if not k.startswith("_")}
     return json.dumps(keep, ensure_ascii=False)
 
@@ -46,7 +46,7 @@ def main():
     if len(args) != 2:
         sys.exit(__doc__)
     text = re.sub(r"\s+", " ", cv_text(args[0]).lower())
-    lines = [l.strip() for l in Path(args[1]).read_text(encoding="utf-8").splitlines()]
+    lines = [l.strip() for l in Path(args[1]).read_text(encoding="utf-8-sig").splitlines()]
     kws = [l for l in lines if l and not l.startswith("#")]
 
     rows = []

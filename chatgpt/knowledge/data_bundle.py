@@ -29,7 +29,7 @@ def home():
 def output_dir():
     cfg = home() / "config.json"
     if cfg.exists():
-        out = json.loads(cfg.read_text(encoding="utf-8")).get("output_dir")
+        out = json.loads(cfg.read_text(encoding="utf-8-sig")).get("output_dir")
         if out:
             return Path(out).expanduser()
     if CLAUDE_AI_OUTPUTS.is_dir():
@@ -71,7 +71,7 @@ def main():
             z.extractall(h)
         cfg = h / "config.json"
         if cfg.exists():  # paths from another machine don't apply here
-            data = json.loads(cfg.read_text(encoding="utf-8"))
+            data = json.loads(cfg.read_text(encoding="utf-8-sig"))
             for k in ("output_dir", "tracker"):
                 if k in data and not Path(data[k]).expanduser().parent.exists():
                     del data[k]
@@ -85,7 +85,7 @@ def main():
                 if p.is_file():
                     z.write(p, p.relative_to(h))
             cfg = h / "config.json"
-            tracker = json.loads(cfg.read_text(encoding="utf-8")).get("tracker") if cfg.exists() else None
+            tracker = json.loads(cfg.read_text(encoding="utf-8-sig")).get("tracker") if cfg.exists() else None
             if tracker and Path(tracker).expanduser().is_file() and not (h / "lamaran.xlsx").exists():
                 z.write(Path(tracker).expanduser(), "lamaran.xlsx")  # tracker kept outside the data home
         print(f"Packed {h} -> {out}")

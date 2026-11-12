@@ -49,7 +49,7 @@ def default_path():
     home = Path(os.environ.get("CV_TAILOR_HOME", Path.home() / ".cv-tailor"))
     cfg = home / "config.json"
     if cfg.exists():
-        tracker = json.loads(cfg.read_text(encoding="utf-8")).get("tracker")
+        tracker = json.loads(cfg.read_text(encoding="utf-8-sig")).get("tracker")
         if tracker:
             return Path(tracker).expanduser()
     return home / "lamaran.xlsx"
